@@ -39,7 +39,10 @@ public class loginServlet extends HttpServlet {
                 requestDispatcher.forward(req, resp);//将数据传给index.jsp
             }
             else {
-                //
+                req.setAttribute("user_name", user_name);
+                req.setAttribute("pass_word", pass_word);
+                RequestDispatcher requestDispatcher = req.getRequestDispatcher("user.jsp");//通过request获取转发器，转发请求到user.jsp页面
+                requestDispatcher.forward(req, resp);//将数据传给user.jsp
             }
         } catch (SQLException e) {
             e.printStackTrace();

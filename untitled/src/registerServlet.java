@@ -14,6 +14,10 @@ public class registerServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String user_name = req.getParameter("username_register");
         String pass_word = req.getParameter("password_register");
+        if(user_name == null || pass_word == null){
+            return;
+        }
+
         daoUtil daoUtilbo = new daoUtil();
         Connection connection = null;
         try {

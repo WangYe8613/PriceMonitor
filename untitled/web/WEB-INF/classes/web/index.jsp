@@ -29,8 +29,8 @@
           <h2>登 录</h2>
 
           <form class="send-button w3layouts agileits" action="loginServlet" method="post">
-              <input type="text" id="username_login" Name="userame" placeholder="用户名" required="">
-              <input type="password" id="password_login" Name="password" placeholder="密码" required="">
+              <input type="text" id="username_login" Name="username_login" placeholder="用户名" required="">
+              <input type="password" id="password_login" Name="password_login" placeholder="密码" required="">
               <input type="submit" value="登 录">
           </form>
           <span style="color:white">
@@ -38,6 +38,9 @@
                   Object msg_login = request.getAttribute("message_login");
                   if(msg_login!=null)
                       out.println(msg_login);
+
+                  request.setAttribute("username_login",request.getParameter("username_login"));
+                  request.setAttribute("password_login",request.getParameter("password_login"));
               %>
           </span>
       </div>
@@ -45,8 +48,8 @@
       <div class="register w3layouts agileits">
           <h2>注 册</h2>
           <form class="send-button w3layouts agileits" action="registerServlet" method="post">
-              <input type="text" id="username_register" Name="username" placeholder="用户名" required="">
-              <input type="password" id="password_register" Name="password" placeholder="密码" required="">
+              <input type="text" id="username_register" Name="username_register" placeholder="用户名" required="">
+              <input type="password" id="password_register" Name="password_register" placeholder="密码" required="">
               <input type="submit" value="注册">
           </form>
           <span style="color:white">
@@ -54,6 +57,9 @@
                   Object msg_register = request.getAttribute("message_register");
                   if(msg_register!=null)
                       out.println(msg_register);
+
+                  request.setAttribute("username_register",request.getParameter("username_register"));
+                  request.setAttribute("password_register",request.getParameter("password_register"));
               %>
           </span>
       </div>

@@ -38,27 +38,44 @@ public class daoUtil {
     public Boolean CheckLogin(Connection conn,Statement stmt,String user_name,String pass_word) throws SQLException, ServletException, IOException {
         // 执行查询
         String sql;
-        sql = "select * from user where name = \"" + user_name + "\" and pass_wrod = \"" + pass_word + "\"";
+        sql = "select * from user where name = \"" + user_name + "\" and pass_word = \"" + pass_word + "\""+" limit 1";
         ResultSet result = stmt.executeQuery(sql);
 
         if (!result.next()) {
-           return false;    //用户信息错误
+           return false;    //用户信息错误或不存在
         } else {
-            return true;    //用户信息正确
+            return true;    //用户信息存在且正确
         }
     }
 
     public Boolean Insert(Connection conn,Statement stmt,String user_name,String pass_word) throws SQLException, ServletException, IOException {
+        if(CheckLogin(conn,stmt,user_name,pass_word)){
+            return false;
+        }
         // 执行插入
         String sql;
         LocalDateTime time = LocalDateTime.now();
-        sql = "insert into user values (\""+user_name+"\",\""+pass_word+"\",\""+time+"\")";
-        ResultSet result = stmt.executeQuery(sql);
+        sql = "insert into user (name,pass_word,create_time)values (\""+user_name+"\",\""+pass_word+"\",\""+time+"\")";
+        int result = stmt.executeUpdate(sql);
 
-        if (!result.next()) {
-            return false;   //插入失败
-        } else {
+        if (result > 0) {
             return true;    //插入成功
+        } else {
+            return false;   //插入失败
+
         }
     }
+//    public Boolean Insert(Connection conn,Statement stmt,String user_name,String pass_word) throws SQLException, ServletException, IOException {
+//        // 执行插入
+//        String sql;
+//        LocalDateTime time = LocalDateTime.now();
+//        sql = "insert into user values (\""+user_name+"\",\""+pass_word+"\",\""+time+"\")";
+//        ResultSet result = stmt.executeQuery(sql);
+//
+//        if (!result.next()) {
+//            return false;   //插入失败
+//        } else {
+//            return true;    //插入成功
+//        }
+//    }
 }
