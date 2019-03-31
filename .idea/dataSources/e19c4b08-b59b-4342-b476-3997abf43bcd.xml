@@ -906,7 +906,7 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="228" parent="5" name="manage">
+    <table id="228" parent="5" name="manager">
       <Comment>管理员</Comment>
     </table>
     <table id="229" parent="5" name="monitor">
@@ -947,181 +947,206 @@
       <DefaultExpression>&apos;2019-01-01&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="237" parent="228" name="other">
+    <column id="237" parent="228" name="role">
       <Position>5</Position>
+      <Comment>0：管理员
+1：用户</Comment>
+      <DataType>binary(1)|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>0</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="238" parent="228" name="other">
+      <Position>6</Position>
       <DataType>varchar(45)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="238" parent="228" name="id_UNIQUE">
+    <index id="239" parent="228" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="239" parent="228" name="PRIMARY">
+    <key id="240" parent="228" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="240" parent="228" name="id_UNIQUE">
+    <key id="241" parent="228" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
     </key>
-    <column id="241" parent="229" name="id">
+    <column id="242" parent="229" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="242" parent="229" name="user_id">
+    <column id="243" parent="229" name="user_id">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="243" parent="229" name="url_id">
+    <column id="244" parent="229" name="url_id">
       <Position>3</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="244" parent="229" name="url_number">
+    <column id="245" parent="229" name="url_max">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
-      <DefaultExpression>0</DefaultExpression>
+      <DefaultExpression>5</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="245" parent="229" name="other">
+    <column id="246" parent="229" name="create_time">
       <Position>5</Position>
+      <DataType>datetime|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;2019-01-01 00:00:00&apos;</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <column id="247" parent="229" name="other">
+      <Position>6</Position>
       <DataType>varchar(45)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="246" parent="229" name="PRIMARY">
+    <key id="248" parent="229" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id
 user_id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="247" parent="230" name="id">
+    <column id="249" parent="230" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="248" parent="230" name="date">
+    <column id="250" parent="230" name="date">
       <Position>2</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2019-01-01&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="249" parent="230" name="price">
+    <column id="251" parent="230" name="price">
       <Position>3</Position>
       <DataType>double|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>0</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="250" parent="230" name="PRIMARY">
+    <key id="252" parent="230" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="251" parent="231" name="id">
+    <column id="253" parent="231" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="252" parent="231" name="url_no">
+    <column id="254" parent="231" name="url_no">
       <Position>2</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>1</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="253" parent="231" name="url">
+    <column id="255" parent="231" name="url">
       <Position>3</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="254" parent="231" name="price_data_id">
+    <column id="256" parent="231" name="price_data_id">
       <Position>4</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="255" parent="231" name="create_time">
+    <column id="257" parent="231" name="create_time">
       <Position>5</Position>
       <DataType>date|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2019-01-01&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="256" parent="231" name="other">
+    <column id="258" parent="231" name="other">
       <Position>6</Position>
       <DataType>varchar(45)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="257" parent="231" name="id_UNIQUE">
+    <index id="259" parent="231" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="258" parent="231" name="PRIMARY">
+    <key id="260" parent="231" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="259" parent="231" name="id_UNIQUE">
+    <key id="261" parent="231" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
     </key>
-    <column id="260" parent="232" name="id">
+    <column id="262" parent="232" name="id">
       <Position>1</Position>
       <DataType>int(11)|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="261" parent="232" name="name">
+    <column id="263" parent="232" name="name">
       <Position>2</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="262" parent="232" name="pass_wrod">
+    <column id="264" parent="232" name="pass_word">
       <Position>3</Position>
       <DataType>varchar(45)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="263" parent="232" name="create_time">
+    <column id="265" parent="232" name="create_time">
       <Position>4</Position>
-      <DataType>date|0s</DataType>
+      <DataType>datetime|0s</DataType>
       <NotNull>1</NotNull>
-      <DefaultExpression>&apos;2019-01-01&apos;</DefaultExpression>
+      <DefaultExpression>&apos;2019-01-01 00:00:00&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="264" parent="232" name="other">
+    <column id="266" parent="232" name="other">
       <Position>5</Position>
       <DataType>varchar(45)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="265" parent="232" name="id_UNIQUE">
+    <index id="267" parent="232" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="266" parent="232" name="PRIMARY">
+    <index id="268" parent="232" name="name_UNIQUE">
+      <ColNames>name</ColNames>
+      <Unique>1</Unique>
+      <Type>btree</Type>
+    </index>
+    <key id="269" parent="232" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="267" parent="232" name="id_UNIQUE">
+    <key id="270" parent="232" name="id_UNIQUE">
       <ColNames>id</ColNames>
       <UnderlyingIndexName>id_UNIQUE</UnderlyingIndexName>
+    </key>
+    <key id="271" parent="232" name="name_UNIQUE">
+      <ColNames>name</ColNames>
+      <UnderlyingIndexName>name_UNIQUE</UnderlyingIndexName>
     </key>
   </database-model>
 </dataSource>

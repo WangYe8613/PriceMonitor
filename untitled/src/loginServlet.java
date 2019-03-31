@@ -33,16 +33,22 @@ public class loginServlet extends HttpServlet {
         }
 
         try {
-            if(!daoUtilbo.CheckLogin(connection, stmt,user_name, pass_word)){
+            int role = daoUtilbo.CheckLogin(connection, stmt, user_name, pass_word);
+            if (0 > role) {
                 req.setAttribute("message_login", "用户名或密码不正确");
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");//通过request获取转发器，转发请求到index.jsp页面
                 requestDispatcher.forward(req, resp);//将数据传给index.jsp
-            }
-            else {
+            } else {
                 req.setAttribute("user_name", user_name);
                 req.setAttribute("pass_word", pass_word);
-                RequestDispatcher requestDispatcher = req.getRequestDispatcher("user.jsp");//通过request获取转发器，转发请求到user.jsp页面
-                requestDispatcher.forward(req, resp);//将数据传给user.jsp
+
+                if (1 == role) { //用户登录
+                    RequestDispatcher requestDispatcher = req.getRequestDispatcher("user.jsp");//通过request获取转发器，转发请求到user.jsp页面
+                    requestDispatcher.forward(req, resp);//将数据传给user.jsp
+                } else { //管理员登录aibut
+                    RequestDispatcher requestDispatcher = req.getRequestDispatcher("manager.jsp");//通过request获取转发器，转发请求到manager.jsp页面
+                    requestDispatcher.forward(req, resp);//将数据传给manager.jsp
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

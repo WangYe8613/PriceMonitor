@@ -38,9 +38,9 @@
                   Object msg_login = request.getAttribute("message_login");
                   if(msg_login!=null)
                       out.println(msg_login);
-
-                  request.setAttribute("username_login",request.getParameter("username_login"));
-                  request.setAttribute("password_login",request.getParameter("password_login"));
+//
+//                  request.setAttribute("username_login",request.getParameter("username_login"));
+//                  request.setAttribute("password_login",request.getParameter("password_login"));
               %>
           </span>
       </div>
@@ -57,9 +57,9 @@
                   Object msg_register = request.getAttribute("message_register");
                   if(msg_register!=null)
                       out.println(msg_register);
-
-                  request.setAttribute("username_register",request.getParameter("username_register"));
-                  request.setAttribute("password_register",request.getParameter("password_register"));
+//
+//                  request.setAttribute("username_register",request.getParameter("username_register"));
+//                  request.setAttribute("password_register",request.getParameter("password_register"));
               %>
           </span>
       </div>
