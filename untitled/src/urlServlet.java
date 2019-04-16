@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-@WebServlet("/userServlet")
-public class userServlet extends HttpServlet {
+@WebServlet("/urlServlet")
+public class urlServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,19 +22,15 @@ public class userServlet extends HttpServlet {
         String[] array = new String[2];
         String url = null;
         if (username_password == null) {
-            array[0] = req.getAttribute("user_name").toString();
-            array[1] = req.getAttribute("pass_word").toString();
+            array[0] = req.getParameter("user_name");
+            array[1] = req.getParameter("pass_word");
         } else {
             array = username_password.split("&");
-        }
-        HashMap<String, List<String>> urlData = null;
-
-        String userId = null;
-
-        String deleteUrl = req.getParameter("delete_url");
-        if (deleteUrl != null && deleteUrl.equals("true")) {
             url = req.getParameter("url");
         }
+        HashMap<String, List<String>> urlDataMap = null;
+        String userId = null;
+        String path = null;
 
         daoUtil daoUtilbo = null;
         try {
@@ -46,25 +42,32 @@ public class userServlet extends HttpServlet {
         }
 
         try {
-            if (url != null) {
-                if (daoUtilbo.deleteUrl(url)) {
-                    req.setAttribute("message_url", "删除成功！");
+            if (url == null) {
+                userId = req.getParameter("user_id");
+                path = "url.jsp";
+            } else {
+                userId = req.getParameter("user_id");
+                String company = req.getParameter("company");
+                String urlName = new String(req.getParameter("url_name").getBytes("iso-8859-1"), "utf-8");
+                if (daoUtilbo.InsertUrl(userId, company, urlName, url)) {
+                    req.setAttribute("message_url", "添加成功！");
                 } else {
-                    req.setAttribute("message_url", "删除失败！");
+                    req.setAttribute("message_url", "添加失败,链接已存在！");
                 }
+                path = "user.jsp";
             }
-            userId = daoUtilbo.GetColumnData("user", "name", array[0], "id");
-            urlData = daoUtilbo.getUrlData(userId);
+            urlDataMap = daoUtilbo.getUrlData(userId);
         } catch (SQLException e) {
             e.printStackTrace();
         }
 
-        req.setAttribute("back", "随便写什么，只是为了检测是否已经走过这个Servlet");
-        req.setAttribute("url_data", urlData);
+        //req.setAttribute("back", "随便写什么，只是为了检测是否已经走过这个Servlet");
+        req.setAttribute("url_data_map", urlDataMap);
         req.setAttribute("user_name", array[0]);
         req.setAttribute("pass_word", array[1]);
         req.setAttribute("user_id", userId);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("user.jsp");//通过request获取转发器，转发请求到user.jsp页面
+
+        RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);//通过request获取转发器，转发请求到user.jsp页面
         requestDispatcher.forward(req, resp);//将数据传给user.jsp
     }
 

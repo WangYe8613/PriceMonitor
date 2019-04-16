@@ -27,18 +27,89 @@
 
     <title>用户界面</title>
 
-    <!-- 表格部分 -->
-    <style type="text/css">
-        table {
-            border-left: 1px solid #000;
-            border-top: 1px solid #000;
-            text-align: center;
+    <!-- 输入框部分 -->
+    <style>
+        .box {
+            width: 900px;
+            height: 500px;
+            border-radius: 5px;
+            box-shadow: 3px 3px 5px 0 rgba(0, 0, 0, 0.4);
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            background: linear-gradient(120deg, #FFFFFF, #111100);
+            display: grid;
+            justify-content: center;
+            align-items: center;
         }
 
-        table tr td {
-            border-right: 1px solid #000;
-            border-bottom: 1px solid #000;
+        .inputBox {
+            width: 700px;
+            height: 50px;
+            background: #222222;
+            border-radius: 5px;
+            position: relative;
         }
+
+        .inputBox input {
+            width: 200px;
+            height: 50px;
+            border: none;
+            padding: 0;
+            padding-left: 5px;
+            color: #fff;
+            background: none;
+            outline: none;
+            position: absolute;
+            bottom: 0;
+        }
+
+        .inputBox input:focus ~ span {
+            transform: scale(0.6);
+            opacity: 0.6;
+        }
+
+        .inputBox input:focus ~ button {
+            opacity: 0.6;
+        }
+
+        .inputBox button {
+            width: 70px;
+            height: 50px;
+            border-radius: 5px;
+            position: absolute;
+            right: 0;
+            border: 0;
+            padding: 0;
+            background: #006ac3;
+            color: #00427a;
+            font-size: 18px;
+            outline: none;
+            cursor: pointer;
+            opacity: 0;
+            transition: 0.5s;
+            z-index: 1;
+        }
+
+        .inputBox button:focus {
+            width: 700px;
+            opacity: 1;
+            color: #fff;
+        }
+
+        .inputBox button:focus ~ span {
+            transform: scale(0.6);
+            opacity: 0.6;
+        }
+    </style>
+
+    <!-- 表格部分 -->
+    <style type="text/css">
+        table {border-left:1px solid #000;border-top:1px solid #000; text-align:center;}
+        table tr td { border-right:1px solid #000; border-bottom:1px solid #000;}
     </style>
 
 </head>
@@ -59,10 +130,9 @@
         RequestDispatcher requestDispatcher = request.getRequestDispatcher("userServlet");
         requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
     }
-    Object userId = request.getAttribute("user_id");
 %>
 
-<div id="wrapper">
+<form id="wrapper" action="userServlet">
     <!-- 顶部界面：用户名 -->
     <nav class="navbar navbar-default top-navbar" role="navigation">
         <div class="navbar-header">
@@ -104,10 +174,8 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a class="active-menu waves-effect waves-dark"
-                       href="urlServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>"><i
-                            class="fa fa-dashboard"></i>
-                        添加新连接</a>
+                    <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i>
+                        Dashboard</a>
                 </li>
 
 
@@ -117,22 +185,19 @@
                     <ul class="nav nav-second-level">
                         <li>
                             <%
-                                HashMap<String, List<String>> urlData = (HashMap<String, List<String>>) request.getAttribute("url_data");
-                                if (urlData != null) {
-                                    List<String> urlNameList = urlData.get("url_name");
-                                    Set<String> urlNameSet = new LinkedHashSet<String>();
-                                    urlNameSet.addAll(urlNameList);
-                                    for (String urlName : urlNameSet) {
+                                HashMap<String,String> urlMap = (HashMap<String,String>) request.getAttribute("url_map");
+                                if (urlMap != null) {
+                                    Iterator it = urlMap.entrySet().iterator();
+                                    while (it.hasNext()) {
+                                        HashMap.Entry entry = (java.util.Map.Entry)it.next();
+                                        Object url_id=entry.getKey();
                             %>
                             <!-- 提交表单的第二种方式-->
-                            <form id="to_dataServlet" action="dataServlet" method="post">
-                                <input type="hidden" name="user_id" value="<%=userId%>">
-                                <%--<input type="hidden"  value="<%=urlName%>">--%>
+                            <form id="form1" method="post" action="dataServlet">
+                                <input type="hidden" name="url_id" value="<%=url_id%>">
                                 <input type="hidden" name="username_password" value="<%=username_password%>">
-                                <i class="fa fa-bar-chart-o"> </i><!-- 图标 -->
-
-                                <input type="submit" class="waves-effect waves-dark" name="url_name" value="<%=urlName%>"
-                                       onclick="jqSubmit()">
+                                <i class="fa fa-bar-chart-o" >  </i><!-- 图标 -->
+                                <input type="button" class="waves-effect waves-dark" value="商品<%=url_id%>" onclick="jqSubmit()">
                             </form>
                             <%
                                     }
@@ -153,69 +218,42 @@
         <!-- 右侧界面：输入框和单选按钮  -->
         <div class="header">
             <h1 class="page-header">
-                商品链接
+                在输入框内添加商品链接
             </h1>
+        </div>
+
+        <div>
+            <input type="radio" name="company" value="0" />天猫
+            <input type="radio" name="company" value="1" />淘宝
+            <input type="radio" name="company" value="2" />京东
+            <input type="radio" name="company" value="3" />唯品会
+        </div>
+
+        <div class="box">
+            <label class="inputBox">
+                <input type="text" id="url" Name="url" placeholder="请输入商品链接" required="">
+                <button type="submit" Name="username_password" value="<%=username_password%>">添加</button>
+            </label>
         </div>
 
         <!-- url列表展示部分-->
         <table width="900" border="0" cellpadding="0" cellspacing="0">
             <tr>
-                <td>商品</td>
-                <td>所属公司</td>
-                <td>商品链接</td>
-                <td>操作</td>
+                <td>天猫</td>
             </tr>
             <%
                 Object message_url = request.getAttribute("message_url");
                 if (message_url != null) {
                     out.println(message_url);
                 }
-
-                List<String> urlNameList=urlData.get("url_name");
-                List<String> companyList=urlData.get("company");
-                List<String> urlList=urlData.get("url");
-                if (urlNameList != null && companyList!=null&&urlList!=null) {
-                    int index = 0;
-                    String company = null;
-                    String url = null;
-                    String url_name = null;
-
-                    for (int i=0;i<urlNameList.size();++i) {
-
-                        switch (companyList.get(i)) {
-                            case "0":
-                                company = "天猫";
-                                break;
-                            case "1":
-                                company = "淘宝";
-                                break;
-                            case "2":
-                                company = "京东";
-                                break;
-                            case "3":
-                                company = "唯品会";
-                                break;
-                            default:
-                                break;
-                        }
-                        url = urlList.get(i);
-                        url_name = urlNameList.get(i);
+                if (urlMap != null) {
+                    Iterator it = urlMap.entrySet().iterator();
+                    while (it.hasNext()) {
+                        Map.Entry entry = (java.util.Map.Entry)it.next();
+                        Object url=entry.getValue();
             %>
             <tr>
-                <td><%=url_name %>
-                </td>
-                <td><%=company %>
-                </td>
-                <td><%=url %>
-                </td>
-                <td>
-                    <form action="userServlet" method="post">
-                        <input type="hidden" name="username_password" value="<%=username_password%>">
-                        <input type="hidden" name="url" value="<%=url%>">
-                        <input type="hidden" name="delete_url" value="true">
-                        <input type="submit" value="删 除">
-                    </form>
-                </td>
+                <td><%=url %></td>
             </tr>
             <%
                     }
@@ -225,12 +263,13 @@
     </div>
 
 
-</div>
+
+</form>
 
 <!-- jsp通过jQuery提交表单给Servlet -->
 <script>
-    function jqSubmit() {
-        $("#to_dataServlet").submit();
+    function jqSubmit(){
+        $("#form1").submit();
     }
 </script>
 

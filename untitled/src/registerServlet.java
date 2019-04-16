@@ -18,24 +18,17 @@ public class registerServlet extends HttpServlet {
             return;
         }
 
-        daoUtil daoUtilbo = new daoUtil();
-        Connection connection = null;
+        daoUtil daoUtilbo = null;
         try {
-            connection = daoUtilbo.Connect();
+            daoUtilbo = new daoUtil();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            if (daoUtilbo.InsertUser(connection, stmt, user_name, pass_word)) {
+            if (daoUtilbo.InsertUser(user_name, pass_word)) {
                 req.setAttribute("message_register", "注册成功，请登录！");
             } else {
                 req.setAttribute("message_register", "注册用户已存在！");
@@ -44,18 +37,6 @@ public class registerServlet extends HttpServlet {
             requestDispatcher.forward(req, resp);//将数据传给index.jsp
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        // 关闭资源
-        try {
-            if (stmt != null)
-                stmt.close();
-        } catch (SQLException se2) {
-        }// 什么都不做
-        try {
-            if (connection != null)
-                connection.close();
-        } catch (SQLException se) {
-            se.printStackTrace();
         }
     }
 

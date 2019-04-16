@@ -16,24 +16,18 @@ public class loginServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String user_name = req.getParameter("username_login");
         String pass_word = req.getParameter("password_login");
-        daoUtil daoUtilbo = new daoUtil();
-        Connection connection = null;
+
+        daoUtil daoUtilbo = null;
         try {
-            connection = daoUtilbo.Connect();
+            daoUtilbo = new daoUtil();
+        } catch (SQLException e) {
+            e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        Statement stmt = null;
-        try {
-            stmt = connection.createStatement();
-        } catch (SQLException e) {
             e.printStackTrace();
         }
 
         try {
-            int role = daoUtilbo.CheckLogin(connection, stmt, user_name, pass_word);
+            int role = daoUtilbo.CheckLogin(user_name, pass_word);
             if (0 > role) {
                 req.setAttribute("message_login", "用户名或密码不正确");
                 RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");//通过request获取转发器，转发请求到index.jsp页面
@@ -52,18 +46,6 @@ public class loginServlet extends HttpServlet {
             }
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-        // 关闭资源
-        try {
-            if (stmt != null)
-                stmt.close();
-        } catch (SQLException se2) {
-        }// 什么都不做
-        try {
-            if (connection != null)
-                connection.close();
-        } catch (SQLException se) {
-            se.printStackTrace();
         }
     }
 
