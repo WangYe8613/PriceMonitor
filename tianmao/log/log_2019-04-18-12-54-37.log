@@ -1,0 +1,6 @@
+2019-04-18 12:54:37,802 [INFO]: outputer.py(output:37) >> Bak_file: ./result/output_2019-04-18-12-54-37.csv
+2019-04-18 12:54:37,804 [ERROR]: spider_main.py(goYou:34) >> 'Mysql' object has no attribute 'create_table'
+2019-04-18 12:54:37,804 [ERROR]: spider_main.py(goYou:35) >> crawling is failed: https://blog.csdn.net/zhangye3017
+2019-04-18 12:54:37,804 [INFO]: spider_main.py(goYou:36) >> Crawling: 1 ; Seccessed: 0 ; Failed: 1
+2019-04-18 12:54:37,804 [INFO]: spider_main.py(goYou:37) >> crawling is done!
+2019-04-18 12:54:37,805 [DEBUG]: mysql.py(__del__:46) >> Deleted object mysql.

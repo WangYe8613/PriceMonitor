@@ -1,0 +1,7 @@
+2019-04-18 11:49:36,657 [INFO]: outputer.py(output:37) >> Bak_file: ./result/output_2019-04-18-11-49-36.csv
+2019-04-18 11:49:36,659 [ERROR]: mysql.py(insert_data:39) >> (1146, u"Table 'zhangye.csdn' doesn't exist")
+2019-04-18 11:49:36,659 [ERROR]: mysql.py(insert_data:40) >> Fail to insert data into table(csdn).
+2019-04-18 11:49:36,659 [INFO]: outputer.py(output:42) >> Output to mysql is done.
+2019-04-18 11:49:36,659 [DEBUG]: mysql.py(__del__:46) >> Deleted object mysql.
+2019-04-18 11:49:36,659 [INFO]: spider_main.py(goYou:36) >> Crawling: 1 ; Seccessed: 1 ; Failed: 0
+2019-04-18 11:49:36,659 [INFO]: spider_main.py(goYou:37) >> crawling is done!

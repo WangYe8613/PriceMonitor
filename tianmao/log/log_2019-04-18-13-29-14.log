@@ -1,0 +1,6 @@
+2019-04-18 13:29:14,985 [INFO]: outputer.py(output:37) >> Bak_file: ./result/output_2019-04-18-13-29-14.csv
+2019-04-18 13:29:14,986 [INFO]: mysql.py(insert_data:37) >> Sucessfully insert data into table(csdn).
+2019-04-18 13:29:14,987 [INFO]: outputer.py(output:43) >> Output to mysql is done.
+2019-04-18 13:29:14,987 [DEBUG]: mysql.py(__del__:46) >> Deleted object mysql.
+2019-04-18 13:29:14,987 [INFO]: spider_main.py(goYou:36) >> Crawling: 1 ; Seccessed: 1 ; Failed: 0
+2019-04-18 13:29:14,987 [INFO]: spider_main.py(goYou:37) >> crawling is done!
