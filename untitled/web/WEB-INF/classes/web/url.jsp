@@ -1,6 +1,4 @@
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Iterator" %>
-<%@ page import="java.util.List" %><%--
+<%@ page import="java.util.*" %><%--
   Created by IntelliJ IDEA.
   User: WY
   Date: 2019/4/12
@@ -152,11 +150,14 @@
             <select id="select_id" class="box_select" onchange="tt(this.id)">
                 <div style="display:none;">        
             <%
-                        List<String> urlNameList = (List<String>) request.getAttribute("url_name_list");
-                        if (urlNameList != null) {
-                            for (String url_name:urlNameList) {
+                        HashMap<String, List<String>> urlData = (HashMap<String, List<String>>) request.getAttribute("url_data");
+                        if (urlData != null) {
+                            List<String> urlNameList = urlData.get("url_name");
+                            Set<String> urlNameSet = new LinkedHashSet<String>();
+                            urlNameSet.addAll(urlNameList);
+                            for (String urlName : urlNameSet) {
                     %>
-                    <option name="url_id"><%=url_name%></option>
+                    <option name="url_name"><%=urlName%></option>
                     <%
                             }
                         }
@@ -182,7 +183,7 @@
         var value = aa.options[i].value;
         if (value == 3) {
 
-            text = "请手动填写原因";
+            text = "请手动填写商品名";
             document.getElementById("input_id").disabled = false;
         }
         document.getElementById("input_id").value = text;

@@ -30,6 +30,8 @@ public class userServlet extends HttpServlet {
         HashMap<String, List<String>> urlData = null;
 
         String userId = null;
+        String role = null;
+        String path = null;
 
         String deleteUrl = req.getParameter("delete_url");
         if (deleteUrl != null && deleteUrl.equals("true")) {
@@ -46,27 +48,39 @@ public class userServlet extends HttpServlet {
         }
 
         try {
+            role = daoUtilbo.GetColumnData("tb_user", "name", array[0], "role");
             if (url != null) {
                 if (daoUtilbo.deleteUrl(url)) {
-                    req.setAttribute("message_url", "删除成功！");
+                    req.setAttribute("message_delete_url", "删除成功！");
                 } else {
-                    req.setAttribute("message_url", "删除失败！");
+                    req.setAttribute("message_delete_url", "删除失败！");
+                }
+                if (role.equals("0")) {
+                    path = "manager.jsp";
                 }
             }
-            userId = daoUtilbo.GetColumnData("user", "name", array[0], "id");
-            urlData = daoUtilbo.getUrlData(userId);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+            if (role.equals("1")) {
+                path = "user.jsp";
+                userId = daoUtilbo.GetColumnData("tb_user", "name", array[0], "id");
+                urlData = daoUtilbo.getUrlData(userId);
+            }
 
-        req.setAttribute("back", "随便写什么，只是为了检测是否已经走过这个Servlet");
-        req.setAttribute("url_data", urlData);
-        req.setAttribute("user_name", array[0]);
-        req.setAttribute("pass_word", array[1]);
-        req.setAttribute("user_id", userId);
-        RequestDispatcher requestDispatcher = req.getRequestDispatcher("user.jsp");//通过request获取转发器，转发请求到user.jsp页面
-        requestDispatcher.forward(req, resp);//将数据传给user.jsp
+    } catch(
+    SQLException e)
+
+    {
+        e.printStackTrace();
     }
+
+        req.setAttribute("back_userServlet","随便写什么，只是为了检测是否已经走过这个Servlet");
+        req.setAttribute("url_data",urlData);
+        req.setAttribute("user_name",array[0]);
+        req.setAttribute("pass_word",array[1]);
+        req.setAttribute("user_id",userId);
+    //req.setAttribute("role", role);
+    RequestDispatcher requestDispatcher = req.getRequestDispatcher(path);//通过request获取转发器，转发请求到path页面
+        requestDispatcher.forward(req,resp);//将数据传给path
+}
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

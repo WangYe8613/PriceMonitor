@@ -45,9 +45,6 @@
                   Object msg_login = request.getAttribute("message_login");
                   if (msg_login != null)
                       out.println(msg_login);
-//
-//                  request.setAttribute("username_login",request.getParameter("username_login"));
-//                  request.setAttribute("password_login",request.getParameter("password_login"));
               %>
           </span>
     </div>

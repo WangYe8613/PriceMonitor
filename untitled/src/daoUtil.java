@@ -50,7 +50,7 @@ public class daoUtil {
     public int CheckLogin(String user_name, String pass_word) throws SQLException, ServletException, IOException {
         // 执行查询
         String sql;
-        sql = "select * from user where name = \"" + user_name + "\" and pass_word = \"" + pass_word + "\"" + " limit 1";
+        sql = "select * from tb_user where name = \"" + user_name + "\" and pass_word = \"" + pass_word + "\"" + " limit 1";
         ResultSet result = statement.executeQuery(sql);
         if (!result.next()) {
             return -1;    //用户信息错误或不存在
@@ -90,19 +90,19 @@ public class daoUtil {
 
     //注册用户信息
     public Boolean InsertUser(String user_name, String pass_word) throws SQLException, ServletException, IOException {
-        if (IsExist("user", "name", user_name)) {
+        if (IsExist("tb_user", "name", user_name)) {
             return false;
         }
         // 执行插入
         String sql;
         LocalDateTime time = LocalDateTime.now();
-        sql = "insert into user (name,pass_word,create_time)values (\"" + user_name + "\",\"" + pass_word + "\",\"" + time + "\")";
+        sql = "insert into tb_user (name,pass_word,create_time)values (\"" + user_name + "\",\"" + pass_word + "\",\"" + time + "\")";
         int result = statement.executeUpdate(sql);
 
         if (result > 0) {   //插入成功，开始注册对应的monitor
-            String re = GetColumnData("user", "name", user_name, "id");
+            String re = GetColumnData("tb_user", "name", user_name, "id");
             int user_id = Integer.parseInt(re);
-            sql = "insert into monitor (user_id,create_time) values (\"" + user_id + "\",\"" + time + "\")";
+            sql = "insert into tb_monitor (user_id,create_time) values (\"" + user_id + "\",\"" + time + "\")";
             result = statement.executeUpdate(sql);
             if (result > 0) { //注册monitor成功
                 return true;
@@ -165,13 +165,26 @@ public class daoUtil {
         return urlMap;
     }
 
-    //删除指定url
+    //删除指定url，附带着把该url对应的price也删除掉
     protected Boolean deleteUrl(String url) throws SQLException, ServletException, IOException {
 
-        String sql_dataList = "delete  from tb_url where url = \"" + url + "\"";
-        int resultSet = statement.executeUpdate(sql_dataList);
+        String sql_selectUrl = "select * from tb_url where url = \"" + url + "\"";
+        ResultSet result = statement.executeQuery(sql_selectUrl);
+
+        String url_name = null;
+        String company = null;
+        if (result.next()) {
+            url_name = result.getString("url_name");
+            company = result.getString("company");
+        }
+        String sql_deleteUrl = "delete  from tb_url where url = \"" + url + "\"";
+        int resultSet = statement.executeUpdate(sql_deleteUrl);
         if (resultSet > 0) {
-            return true;
+            String sql_deletePrice = "delete  from tb_price where url_name = \"" + url_name + "\" and company = " + company;
+            resultSet = statement.executeUpdate(sql_deletePrice);
+            if (resultSet > 0) {
+                return true;
+            }
         }
         return false;
     }
@@ -217,6 +230,95 @@ public class daoUtil {
         dataMap.put("2", map_2);
         dataMap.put("3", map_3);
         return dataMap;
+    }
+
+    //申请提升Url添加数量上限，实际就是修改monitor中的url_max_application字段
+    protected Boolean updateUrlMaxApplication(String user_id, String newUrlMaxApplication) throws SQLException, ServletException, IOException {
+
+        String sql_selectMonitor = "select * from tb_monitor where user_id = " + user_id;
+        ResultSet resultSet = statement.executeQuery(sql_selectMonitor);
+        String oldUrlMaxApplication = null;
+        if (resultSet.next()) {
+            oldUrlMaxApplication = resultSet.getString("url_max_application");
+        }
+        String sql_updateUrlMax = "update tb_monitor set url_max_application = " + newUrlMaxApplication + " where url_max_application = " + oldUrlMaxApplication +" and user_id ="+user_id;
+        int result = statement.executeUpdate(sql_updateUrlMax);
+        if (result > 0) {
+            return true;
+        }
+        return false;
+    }
+
+    //提升Url添加数量上限，实际就是修改monitor中的url_max字段，并将url_max_application重新置为0
+    protected Boolean updateUrlMax(String user_id, String newUrlMax) throws SQLException, ServletException, IOException {
+
+        String sql_selectMonitor = "select * from tb_monitor where user_id = " + user_id;
+        ResultSet resultSet = statement.executeQuery(sql_selectMonitor);
+        String oldUrlMax = null;
+        String oldUrlMaxApplication = null;
+        if (resultSet.next()) {
+            oldUrlMax = resultSet.getString("url_max");
+            oldUrlMaxApplication = resultSet.getString("url_max_application");
+        }
+        String sql_updateUrlMax = "update tb_monitor set url_max= " + newUrlMax + " where url_max = " + oldUrlMax;
+        int result = statement.executeUpdate(sql_updateUrlMax);
+        if (result > 0) {
+            String sql_updateUrlMaxApplication = "update tb_monitor set url_max_application = 0 where url_max_application = " + oldUrlMaxApplication;
+            result = statement.executeUpdate(sql_updateUrlMaxApplication);
+            if (result > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //获取user信息，包括id、name、pass_word、url_max、url_max_application
+    protected HashMap<String, List<String>> getUserDataMap() throws SQLException, ServletException, IOException {
+
+        HashMap<String, List<String>> userDataMap = new HashMap<>();
+        List<String> nameList = new LinkedList<>();
+        List<String> idList = new LinkedList<>();
+        List<String> passWordList = new LinkedList<>();
+        List<String> urlMaxList = new LinkedList<>();
+        List<String> urlMaxApplicationList = new LinkedList<>();
+
+        String sql_userList = "select * from tb_user where role = 1";
+        ResultSet resultSet = statement.executeQuery(sql_userList);
+        while (resultSet.next()) {
+            idList.add(resultSet.getString("id"));
+            nameList.add(resultSet.getString("name"));
+            passWordList.add(resultSet.getString("pass_word"));
+        }
+        for (String id : idList) {
+            String sql_monitor = "select * from tb_monitor where user_id = " + id + " limit 1";
+            resultSet = statement.executeQuery(sql_monitor);
+            while (resultSet.next()) {
+                urlMaxList.add(resultSet.getString("url_max"));
+                urlMaxApplicationList.add(resultSet.getString("url_max_application"));
+            }
+        }
+        userDataMap.put("id", idList);
+        userDataMap.put("name", nameList);
+        userDataMap.put("pass_word", passWordList);
+        userDataMap.put("url_max", urlMaxList);
+        userDataMap.put("url_max_application", urlMaxApplicationList);
+
+        return userDataMap;
+    }
+
+    //删除指定user，附带着把该user_id对应的monitor、url、price也删除掉
+    protected Boolean deleteUser(String user_id) throws SQLException, ServletException, IOException {
+
+        String sql_deleteUser = "delete  from tb_user where id = \"" + user_id + "\"";
+        int resultSet = statement.executeUpdate(sql_deleteUser);
+        if (resultSet > 0) {
+            String sql_deleteMonitor = "delete  from tb_monitor where user_id = \"" + user_id + "\"";
+            resultSet = statement.executeUpdate(sql_deleteMonitor);
+            if (resultSet > 0) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

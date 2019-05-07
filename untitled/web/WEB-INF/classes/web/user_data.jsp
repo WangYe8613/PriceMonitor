@@ -51,16 +51,15 @@
         response.sendRedirect("401.html");
     }
 
-    Object back = request.getAttribute("back_managerServlet");
-    if (back == null) {
-        request.setAttribute("user_name", userName);
-        request.setAttribute("pass_word", passWord);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("managerServlet");
-        requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
-    }
+//    Object back = request.getAttribute("back");
+//    if (back == null) {
+//        request.setAttribute("user_name", userName);
+//        request.setAttribute("pass_word", passWord);
+//        RequestDispatcher requestDispatcher = request.getRequestDispatcher("userDataServlet");
+//        requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
+//    }
 
     String username_password = userName.toString() + "&" + passWord;
-    //Object userId = request.getAttribute("user_id");
 %>
 
 <div id="wrapper">
@@ -144,77 +143,74 @@
         <!-- 右侧界面：输入框和单选按钮  -->
         <div class="header">
             <h1 class="page-header">
-                用户列表
+                商品链接
             </h1>
         </div>
 
         <!-- url列表展示部分-->
         <table width="900" border="0" cellpadding="0" cellspacing="0">
             <tr>
-                <td>用户ID</td>
-                <td>用户名</td>
-                <td>密码</td>
-                <td>当前url添加上限</td>
-                <td>申请提升url添加上限</td>
+                <td>商品</td>
+                <td>所属公司</td>
+                <td>商品链接</td>
                 <td>操作</td>
             </tr>
             <%
-                Object message_update_user = request.getAttribute("message_update_user");
-                if (message_update_user != null) {
-                    out.println(message_update_user);
+                Object message_url = request.getAttribute("message_url");
+                if (message_url != null) {
+                    out.println(message_url);
                 }
-                Object message_delete_user = request.getAttribute("message_delete_user");
-                if (message_delete_user != null) {
-                    out.println(message_delete_user);
+                Object message_delete_url = request.getAttribute("message_delete_url");
+                if (message_url != null) {
+                    out.println(message_delete_url);
                 }
 
-                if (userDataMap != null) {
-                    List<String> idList = userDataMap.get("id");
-                    List<String> nameList = userDataMap.get("name");
-                    List<String> passWordList = userDataMap.get("pass_word");
-                    List<String> urlMaxList = userDataMap.get("url_max");
-                    List<String> urlMaxApplicationList = userDataMap.get("url_max_application");
-                    if (idList != null && nameList != null && passWordList != null && urlMaxList != null && urlMaxApplicationList != null) {
+                HashMap<String, List<String>> urlData = (HashMap<String, List<String>>) request.getAttribute("url_data");
+                if (urlData != null) {
+                    List<String> urlNameList = urlData.get("url_name");
+                    List<String> companyList = urlData.get("company");
+                    List<String> urlList = urlData.get("url");
+                    if (urlNameList != null && companyList != null && urlList != null) {
                         int index = 0;
-                        String id = null;
-                        String name = null;
-                        String pass_word = null;
-                        String url_max = null;
-                        String url_max_application = null;
+                        String company = null;
+                        String url = null;
+                        String url_name = null;
 
-                        for (int i = 0; i < idList.size(); ++i) {
-                            id = idList.get(i);
-                            name = nameList.get(i);
-                            pass_word = passWordList.get(i);
-                            url_max = urlMaxList.get(i);
-                            url_max_application = urlMaxApplicationList.get(i);
+                        for (int i = 0; i < urlNameList.size(); ++i) {
+
+                            switch (companyList.get(i)) {
+                                case "0":
+                                    company = "天猫";
+                                    break;
+                                case "1":
+                                    company = "淘宝";
+                                    break;
+                                case "2":
+                                    company = "京东";
+                                    break;
+                                case "3":
+                                    company = "唯品会";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            url = urlList.get(i);
+                            url_name = urlNameList.get(i);
 
             %>
             <tr>
-                <td><%=id %>
+                <td><%=url_name %>
                 </td>
-                <td><%=name %>
+                <td><%=company %>
                 </td>
-                <td><%=pass_word %>
-                </td>
-                <td><%=url_max %>
-                </td>
-                <td><%=url_max_application %>
+                <td><%=url %>
                 </td>
                 <td>
-                    <form action="managerServlet" method="post">
+                    <form action="userServlet" method="post">
                         <input type="hidden" name="username_password" value="<%=username_password%>">
-                        <input type="hidden" name="id" value="<%=id%>">
-                        <input type="hidden" name="delete_user" value="true">
-                        <input type="submit" name="operation" value="删 除">
-                        <%
-                            if (!url_max_application.equals("0")) {
-                        %>
-                        <input type="hidden" name="url_max_application" value="<%=url_max_application%>">
-                        <input type="submit" name="operation" value="提 升">
-                        <%
-                            }
-                        %>
+                        <input type="hidden" name="url" value="<%=url%>">
+                        <input type="hidden" name="delete_url" value="true">
+                        <input type="submit" value="删 除">
                     </form>
                 </td>
             </tr>

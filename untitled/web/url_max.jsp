@@ -10,6 +10,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Target Material Design Bootstrap Admin Template</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
@@ -24,21 +25,21 @@
 
     <link rel="stylesheet" href="/s/Lightweight-Chart/cssCharts.css">
 
-    <title>用户界面</title>
+    <title>申请界面</title>
 
-    <!-- 表格部分 -->
-    <style type="text/css">
-        table {
-            border-left: 1px solid #000;
-            border-top: 1px solid #000;
-            text-align: center;
-        }
+    <%--<!-- 表格部分 -->--%>
+    <%--<style type="text/css">--%>
+        <%--table {--%>
+            <%--border-left: 1px solid #000;--%>
+            <%--border-top: 1px solid #000;--%>
+            <%--text-align: center;--%>
+        <%--}--%>
 
-        table tr td {
-            border-right: 1px solid #000;
-            border-bottom: 1px solid #000;
-        }
-    </style>
+        <%--table tr td {--%>
+            <%--border-right: 1px solid #000;--%>
+            <%--border-bottom: 1px solid #000;--%>
+        <%--}--%>
+    <%--</style>--%>
 
 </head>
 
@@ -51,15 +52,8 @@
         response.sendRedirect("401.html");
     }
     String username_password = userName.toString() + "&" + passWord;
-    Object back = request.getAttribute("back_userServlet");
-    if (back == null) {
-        request.setAttribute("user_name", userName);
-        request.setAttribute("pass_word", passWord);
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher("userServlet");
-        requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
-    }
     Object userId = request.getAttribute("user_id");
-
+    Object oldUrlMax = request.getAttribute("old_url_max");
 %>
 
 <div id="wrapper">
@@ -144,7 +138,7 @@
                 </li>
                 <li>
                     <a class="active-menu waves-effect waves-dark"
-                       href="urlMaxServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                       href="#">
                         <i class="fa fa-dashboard"></i>
                         申请提升url数量上限</a>
                 </li>
@@ -157,82 +151,34 @@
         <!-- 右侧界面：输入框和单选按钮  -->
         <div class="header">
             <h1 class="page-header">
-                商品链接
+                申请提升Url数量上限
             </h1>
         </div>
 
-        <!-- url列表展示部分-->
-        <table width="900" border="0" cellpadding="0" cellspacing="0">
-            <tr>
-                <td>商品</td>
-                <td>所属公司</td>
-                <td>商品链接</td>
-                <td>操作</td>
-            </tr>
-            <%
-                Object message_url = request.getAttribute("message_url");
-                if (message_url != null) {
-                    out.println(message_url);
-                }
-                Object message_delete_url = request.getAttribute("message_delete_url");
-                if (message_url != null) {
-                    out.println(message_delete_url);
-                }
+        <%
+            Object messageUrlMax=request.getAttribute("message_url_max");
+            if(messageUrlMax!=null){
+        %>
+        <a><%=messageUrlMax%>></a>
+        <%
+            }
+        %>
+        <form id="to_urlMaxServlet" action="urlMaxServlet" method="post">
+            <div>
+                <label for="">    当前url添加数量上限</label>
+                <table width="10" border="0" cellpadding="0" cellspacing="0">
+                    <tr>
+                        <td><%=oldUrlMax%></td>
+                    </tr>
+                </table>>
+                <label for="">    申请提升上限</label>
+                <input type="hidden" name="user_id" value="<%=userId%>">
+                <input type="text" width="10" name="url_max" id="url_max" class="form-control" placeholder="请输入想要申请的上限数字" required="">
+                <button type="submit" Name="username_password" value="<%=username_password%>" class="btn btn-primary" id="btn-reg">申请</button>
+                <%--<a href="login.jsp" class="btn btn-default" id="btn-reg">返回登录</a>--%>
+            </div>
+        </form>
 
-                if (urlData != null) {
-                    List<String> urlNameList = urlData.get("url_name");
-                    List<String> companyList = urlData.get("company");
-                    List<String> urlList = urlData.get("url");
-                    if (urlNameList != null && companyList != null && urlList != null) {
-                        int index = 0;
-                        String company = null;
-                        String url = null;
-                        String url_name = null;
-
-                        for (int i = 0; i < urlNameList.size(); ++i) {
-
-                            switch (companyList.get(i)) {
-                                case "0":
-                                    company = "天猫";
-                                    break;
-                                case "1":
-                                    company = "淘宝";
-                                    break;
-                                case "2":
-                                    company = "京东";
-                                    break;
-                                case "3":
-                                    company = "唯品会";
-                                    break;
-                                default:
-                                    break;
-                            }
-                            url = urlList.get(i);
-                            url_name = urlNameList.get(i);
-
-            %>
-            <tr>
-                <td><%=url_name %>
-                </td>
-                <td><%=company %>
-                </td>
-                <td><%=url %>
-                </td>
-                <td>
-                    <form action="userServlet" method="post">
-                        <input type="hidden" name="username_password" value="<%=username_password%>">
-                        <input type="hidden" name="url" value="<%=url%>">
-                        <input type="hidden" name="delete_url" value="true">
-                        <input type="submit" value="删 除">
-                    </form>
-                </td>
-            </tr>
-            <%
-                        }
-                    }
-                }
-            %>
-        </table>
     </div>
 
 
@@ -241,7 +187,7 @@
 <!-- jsp通过jQuery提交表单给Servlet -->
 <script>
     function jqSubmit() {
-        $("#to_dataServlet").submit();
+        $("#to_urlMaxServlet").submit();
     }
 </script>
 
