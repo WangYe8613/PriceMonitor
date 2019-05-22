@@ -148,6 +148,12 @@
                         <i class="fa fa-dashboard"></i>
                         申请提升url数量上限</a>
                 </li>
+                <li>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlReductionServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                        <i class="fa fa-dashboard"></i>
+                        数据还原</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -186,23 +192,24 @@
                     if (urlNameList != null && companyList != null && urlList != null) {
                         int index = 0;
                         String company = null;
+                        String company_name = null;
                         String url = null;
                         String url_name = null;
 
                         for (int i = 0; i < urlNameList.size(); ++i) {
-
-                            switch (companyList.get(i)) {
+                            company=companyList.get(i);
+                            switch (company) {
                                 case "0":
-                                    company = "天猫";
+                                    company_name = "天猫";
                                     break;
                                 case "1":
-                                    company = "淘宝";
+                                    company_name = "淘宝";
                                     break;
                                 case "2":
-                                    company = "京东";
+                                    company_name = "京东";
                                     break;
                                 case "3":
-                                    company = "唯品会";
+                                    company_name = "唯品会";
                                     break;
                                 default:
                                     break;
@@ -214,7 +221,7 @@
             <tr>
                 <td><%=url_name %>
                 </td>
-                <td><%=company %>
+                <td><%=company_name %>
                 </td>
                 <td><%=url %>
                 </td>
@@ -223,6 +230,9 @@
                         <input type="hidden" name="username_password" value="<%=username_password%>">
                         <input type="hidden" name="url" value="<%=url%>">
                         <input type="hidden" name="delete_url" value="true">
+                        <input type="hidden" name="user_id" value="<%=userId%>">
+                        <input type="hidden" name="url_name" value="<%=url_name%>">
+                        <input type="hidden" name="company" value="<%=company%>">
                         <input type="submit" value="删 除">
                     </form>
                 </td>

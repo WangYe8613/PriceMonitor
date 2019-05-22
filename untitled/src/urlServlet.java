@@ -49,14 +49,20 @@ public class urlServlet extends HttpServlet {
                 userId = req.getParameter("user_id");
                 String company = req.getParameter("company");
                 String urlName = new String(req.getParameter("url_name").getBytes("iso-8859-1"), "utf-8");
-                if (daoUtilbo.InsertUrl(userId, company, urlName, url)) {
-                    req.setAttribute("message_url", "添加成功！");
+
+                String isExist = daoUtilbo.IsExist("tb_url", "url", url);
+                if (isExist != null && isExist.equals("1")) {
+                    req.setAttribute("message_url", "该url曾经添加过，但已删除，如需还原请申请还原数据！");
                 } else {
-                    req.setAttribute("message_url", "添加失败,链接已存在！");
+                    if (daoUtilbo.InsertUrl(userId, company, urlName, url)) {
+                        req.setAttribute("message_url", "添加成功！");
+                    } else {
+                        req.setAttribute("message_url", "添加失败,链接已存在！");
+                    }
                 }
                 path = "user.jsp";
             }
-            urlData = daoUtilbo.getUrlData(userId);
+            urlData = daoUtilbo.getUrlData(userId, "0");
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -11,8 +11,8 @@
         <servlet-name>loginServlet</servlet-name>
         <url-pattern>untitled/src/loginServlet</url-pattern>
     </servlet-mapping>
-	
-	<servlet>
+
+    <servlet>
         <servlet-name>registerServlet</servlet-name>
         <servlet-class>registerServlet</servlet-class>
     </servlet>
@@ -20,8 +20,8 @@
         <servlet-name>registerServlet</servlet-name>
         <url-pattern>untitled/src/registerServlet</url-pattern>
     </servlet-mapping>
-	
-	<servlet>
+
+    <servlet>
         <servlet-name>managerServlet</servlet-name>
         <servlet-class>managerServlet</servlet-class>
     </servlet>
@@ -29,8 +29,8 @@
         <servlet-name>managerServlet</servlet-name>
         <url-pattern>untitled/src/managerServlet</url-pattern>
     </servlet-mapping>
-	
-	<servlet>
+
+    <servlet>
         <servlet-name>urlMaxServlet</servlet-name>
         <servlet-class>urlMaxServlet</servlet-class>
     </servlet>
@@ -38,32 +38,32 @@
         <servlet-name>urlMaxServlet</servlet-name>
         <url-pattern>untitled/src/urlMaxServlet</url-pattern>
     </servlet-mapping>
-	
-	<servlet>
+
+    <servlet>
         <servlet-name>urlServlet</servlet-name>
         <servlet-class>urlServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>urlServlet</servlet-name>
         <url-pattern>untitled/src/urlServlet</url-pattern>
-    <servlet-mapping>
-	
-	<servlet>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>userDataServlet</servlet-name>
         <servlet-class>userDataServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>userDataServlet</servlet-name>
         <url-pattern>untitled/src/userDataServlet</url-pattern>
-    <servlet-mapping>
-	
-	<servlet>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>userServlet</servlet-name>
         <servlet-class>userServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
         <url-pattern>untitled/src/userServlet</url-pattern>
-    <servlet-mapping>
-        
+    </servlet-mapping>
+
 </web-app>

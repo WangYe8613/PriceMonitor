@@ -32,7 +32,7 @@ public class dataServlet extends HttpServlet {
 
         try {
             HashMap<String, HashMap<String,String>> priceDataMap = daoUtilbo.getPriceData(urlName);
-            HashMap<String, List<String>> urlData=daoUtilbo.getUrlData(userId);
+            HashMap<String, List<String>> urlData=daoUtilbo.getUrlData(userId,"0");
             req.setAttribute("price_data_map", priceDataMap);
             req.setAttribute("user_id", userId);
             req.setAttribute("url_data", urlData);

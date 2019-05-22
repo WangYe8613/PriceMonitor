@@ -133,7 +133,12 @@
                         </li>
                     </ul>
                 </li>
-
+                <li>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="approvalReductionServlet?user_name=<%=userName%>&pass_word=<%=passWord%>">
+                        <i class="fa fa-dashboard"></i>
+                        处理数据还原请求</a>
+                </li>
             </ul>
         </div>
     </nav>

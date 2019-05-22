@@ -10,7 +10,6 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Target Material Design Bootstrap Admin Template</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
@@ -91,6 +90,7 @@
         response.sendRedirect("401.html");
     }
     String username_password = userName.toString() + "&" + passWord;
+    Object userId = request.getAttribute("user_id");
 %>
 
 <div id="wrapper">
@@ -105,7 +105,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand waves-effect waves-dark" href="index.html"><i class="large material-icons">track_changes</i>
-                <strong>target</strong></a>
+                <strong>价格监视器</strong></a>
 
             <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
         </div>
@@ -114,7 +114,7 @@
             <li>
                 <a class="dropdown-button waves-effect waves-dark" href="#!" data-activates="dropdown1">
                     <i class="fa fa-user fa-fw"></i>
-                    <b><%//out.print(user_name);%></b>
+                    <b><%out.print(userName);%></b>
                     <i class="material-icons right">arrow_drop_down</i>
                 </a>
             </li>
@@ -135,7 +135,9 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a class="active-menu waves-effect waves-dark" href="index.html"><i class="fa fa-dashboard"></i>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>"><i
+                            class="fa fa-dashboard"></i>
                         添加新连接</a>
                 </li>
 
@@ -171,7 +173,10 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="empty.html" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> Empty Page</a>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlMaxServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                        <i class="fa fa-dashboard"></i>
+                        申请提升url数量上限</a>
                 </li>
             </ul>
         </div>

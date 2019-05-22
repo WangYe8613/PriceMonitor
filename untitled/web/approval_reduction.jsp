@@ -10,7 +10,6 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Target Material Design Bootstrap Admin Template</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
@@ -25,21 +24,21 @@
 
     <link rel="stylesheet" href="/s/Lightweight-Chart/cssCharts.css">
 
-    <title>申请界面</title>
+    <title>管理员界面</title>
 
-    <%--<!-- 表格部分 -->--%>
-    <%--<style type="text/css">--%>
-        <%--table {--%>
-            <%--border-left: 1px solid #000;--%>
-            <%--border-top: 1px solid #000;--%>
-            <%--text-align: center;--%>
-        <%--}--%>
+    <!-- 表格部分 -->
+    <style type="text/css">
+        table {
+            border-left: 1px solid #000;
+            border-top: 1px solid #000;
+            text-align: center;
+        }
 
-        <%--table tr td {--%>
-            <%--border-right: 1px solid #000;--%>
-            <%--border-bottom: 1px solid #000;--%>
-        <%--}--%>
-    <%--</style>--%>
+        table tr td {
+            border-right: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+    </style>
 
 </head>
 
@@ -51,9 +50,17 @@
     if (userName == null || passWord == null) {
         response.sendRedirect("401.html");
     }
+
+    Object back = request.getAttribute("back_managerServlet");
+    if (back == null) {
+        request.setAttribute("user_name", userName);
+        request.setAttribute("pass_word", passWord);
+        RequestDispatcher requestDispatcher = request.getRequestDispatcher("managerServlet");
+        requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
+    }
+
     String username_password = userName.toString() + "&" + passWord;
-    Object userId = request.getAttribute("user_id");
-    Object oldUrlMax = request.getAttribute("old_url_max");
+    //Object userId = request.getAttribute("user_id");
 %>
 
 <div id="wrapper">
@@ -98,35 +105,27 @@
             <ul class="nav" id="main-menu">
 
                 <li>
-                    <a class="active-menu waves-effect waves-dark"
-                       href="urlServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>"><i
-                            class="fa fa-dashboard"></i>
-                        添加新连接</a>
-                </li>
-
-
-                <li>
-                    <a href="#" class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 商品<span
+                    <a href="managerServlet?user_name=<%=userName%>&pass_word=<%=passWord%>"
+                       class="waves-effect waves-dark"><i class="fa fa-sitemap"></i> 用户信息<span
                             class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
                         <li>
                             <%
-                                HashMap<String, List<String>> urlData = (HashMap<String, List<String>>) request.getAttribute("url_data");
-                                if (urlData != null) {
-                                    List<String> urlNameList = urlData.get("url_name");
-                                    Set<String> urlNameSet = new LinkedHashSet<String>();
-                                    urlNameSet.addAll(urlNameList);
-                                    for (String urlName : urlNameSet) {
+                                HashMap<String, List<String>> userDataMap = (HashMap<String, List<String>>) request.getAttribute("user_data_map");
+                                if (userDataMap != null) {
+                                    List<String> nameList = userDataMap.get("name");
+                                    Set<String> nameSet = new LinkedHashSet<String>();
+                                    nameSet.addAll(nameList);
+                                    for (String name : nameSet) {
                             %>
                             <!-- 提交表单的第二种方式-->
-                            <form id="to_dataServlet" action="dataServlet" method="post">
-                                <input type="hidden" name="user_id" value="<%=userId%>">
+                            <form id="to_userDataServlet" action="userDataServlet" method="post">
                                 <%--<input type="hidden"  value="<%=urlName%>">--%>
                                 <input type="hidden" name="username_password" value="<%=username_password%>">
                                 <i class="fa fa-bar-chart-o"> </i><!-- 图标 -->
 
-                                <input type="submit" class="waves-effect waves-dark" name="url_name"
-                                       value="<%=urlName%>"
+                                <input type="submit" class="waves-effect waves-dark" name="name"
+                                       value="<%=name%>"
                                        onclick="jqSubmit()">
                             </form>
                             <%
@@ -140,13 +139,7 @@
                     <a class="active-menu waves-effect waves-dark"
                        href="#">
                         <i class="fa fa-dashboard"></i>
-                        申请提升url数量上限</a>
-                </li>
-                <li>
-                    <a class="active-menu waves-effect waves-dark"
-                       href="urlReductionServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
-                        <i class="fa fa-dashboard"></i>
-                        数据还原</a>
+                        处理数据还原请求</a>
                 </li>
             </ul>
         </div>
@@ -157,34 +150,72 @@
         <!-- 右侧界面：输入框和单选按钮  -->
         <div class="header">
             <h1 class="page-header">
-                申请提升Url数量上限
+                数据还原请求列表
             </h1>
         </div>
 
-        <%
-            Object messageUrlMax=request.getAttribute("message_url_max");
-            if(messageUrlMax!=null){
-        %>
-        <a><%=messageUrlMax%>></a>
-        <%
-            }
-        %>
-        <form id="to_urlMaxServlet" action="urlMaxServlet" method="post">
-            <div>
-                <label for="">    当前url添加数量上限</label>
-                <table width="10" border="0" cellpadding="0" cellspacing="0">
-                    <tr>
-                        <td><%=oldUrlMax%></td>
-                    </tr>
-                </table>>
-                <label for="">    申请提升上限</label>
-                <input type="hidden" name="user_id" value="<%=userId%>">
-                <input type="text" width="10" name="url_max" id="url_max" class="form-control" placeholder="请输入想要申请的上限数字" required="">
-                <button type="submit" Name="username_password" value="<%=username_password%>" class="btn btn-primary" id="btn-reg">申请</button>
-                <%--<a href="login.jsp" class="btn btn-default" id="btn-reg">返回登录</a>--%>
-            </div>
-        </form>
+        <!-- url列表展示部分-->
+        <table width="900" border="0" cellpadding="0" cellspacing="0">
+            <tr>
+                <td>用户ID</td>
+                <td>商品名</td>
+                <td>所属电商</td>
+                <td>用户名</td>
+                <td>操作</td>
+            </tr>
+            <%
+                Object message_update_user = request.getAttribute("message_reduction_url");
+                if (message_update_user != null) {
+                    out.println(message_update_user);
+                }
+                HashMap<String, List<String>> reductionDataMap = (HashMap<String, List<String>>) request.getAttribute("reduction_data_map");
 
+                if (reductionDataMap != null) {
+                    List<String> userIdList = reductionDataMap.get("user_id");
+                    List<String> urlNameList = reductionDataMap.get("url_name");
+                    List<String> companyList = reductionDataMap.get("company");
+                    List<String> userNameList = reductionDataMap.get("user_name");
+
+                    if (userIdList != null && urlNameList != null && companyList != null && userNameList != null) {
+                        int index = 0;
+                        String user_id = null;
+                        String url_name = null;
+                        String company = null;
+                        String user_name = null;
+
+                        for (int i = 0; i < userIdList.size(); ++i) {
+                            user_id = userIdList.get(i);
+                            url_name = urlNameList.get(i);
+                            company = companyList.get(i);
+                            user_name = userNameList.get(i);
+
+            %>
+            <tr>
+                <td><%=user_id %>
+                </td>
+                <td><%=url_name %>
+                </td>
+                <td><%=company %>
+                </td>
+                <td><%=user_name %>
+                </td>
+                <td>
+                    <form action="approvalReductionServlet" method="post">
+                        <input type="hidden" name="username_password" value="<%=username_password%>">
+                        <input type="hidden" name="user_id" value="<%=user_id%>">
+                        <input type="hidden" name="url_name" value="<%=url_name%>">
+                        <input type="hidden" name="company" value="<%=company%>">
+                        <input type="hidden" name="reduction" value="true">
+                        <input type="submit" name="operation" value="还 原">
+                    </form>
+                </td>
+            </tr>
+            <%
+                        }
+                    }
+                }
+            %>
+        </table>
     </div>
 
 
@@ -193,7 +224,7 @@
 <!-- jsp通过jQuery提交表单给Servlet -->
 <script>
     function jqSubmit() {
-        $("#to_urlMaxServlet").submit();
+        $("#to_userDataServlet").submit();
     }
 </script>
 

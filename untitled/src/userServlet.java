@@ -28,14 +28,18 @@ public class userServlet extends HttpServlet {
             array = username_password.split("&");
         }
         HashMap<String, List<String>> urlData = null;
-
-        String userId = null;
         String role = null;
         String path = null;
+        String userId=null;
+        String urlName=null;
+        String company=null;
 
         String deleteUrl = req.getParameter("delete_url");
         if (deleteUrl != null && deleteUrl.equals("true")) {
             url = req.getParameter("url");
+            userId=req.getParameter("user_id");
+            urlName=req.getParameter("url_name");
+            company=req.getParameter("company");
         }
 
         daoUtil daoUtilbo = null;
@@ -50,7 +54,7 @@ public class userServlet extends HttpServlet {
         try {
             role = daoUtilbo.GetColumnData("tb_user", "name", array[0], "role");
             if (url != null) {
-                if (daoUtilbo.deleteUrl(url)) {
+                if (daoUtilbo.deleteUrl(userId,urlName,company)) {
                     req.setAttribute("message_delete_url", "删除成功！");
                 } else {
                     req.setAttribute("message_delete_url", "删除失败！");
@@ -62,7 +66,7 @@ public class userServlet extends HttpServlet {
             if (role.equals("1")) {
                 path = "user.jsp";
                 userId = daoUtilbo.GetColumnData("tb_user", "name", array[0], "id");
-                urlData = daoUtilbo.getUrlData(userId);
+                urlData = daoUtilbo.getUrlData(userId,"0");
             }
 
     } catch(

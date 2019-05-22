@@ -36,7 +36,7 @@ public class userDataServlet extends HttpServlet {
             //String urlName=daoUtilbo.GetColumnData("tb_url","user_id",userId,"url_name");
 
             //HashMap<String, HashMap<String,String>> priceDataMap = daoUtilbo.getPriceData(urlName);
-            HashMap<String, List<String>> urlData=daoUtilbo.getUrlData(userId);
+            HashMap<String, List<String>> urlData=daoUtilbo.getUrlData(userId,"0");
             HashMap<String, List<String>> userDataMap = daoUtilbo.getUserDataMap();
 
             //req.setAttribute("price_data_map", priceDataMap);

@@ -10,7 +10,6 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Target Material Design Bootstrap Admin Template</title>
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="materialize/css/materialize.min.css" media="screen,projection"/>
@@ -52,7 +51,7 @@
         response.sendRedirect("401.html");
     }
     String username_password = userName.toString() + "&" + passWord;
-    Object back = request.getAttribute("back");
+    Object back = request.getAttribute("back_userServlet");
     if (back == null) {
         request.setAttribute("user_name", userName);
         request.setAttribute("pass_word", passWord);
@@ -60,6 +59,7 @@
         requestDispatcher.forward(request, response); //如果back为空，则去userServlet获取数据，即保证先从userServlet走到user.jsp
     }
     Object userId = request.getAttribute("user_id");
+
 %>
 
 <div id="wrapper">
@@ -74,7 +74,7 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand waves-effect waves-dark" href="index.html"><i class="large material-icons">track_changes</i>
-                <strong>target</strong></a>
+                <strong>价格监视器</strong></a>
 
             <div id="sideNav" href=""><i class="material-icons dp48">toc</i></div>
         </div>
@@ -131,7 +131,8 @@
                                 <input type="hidden" name="username_password" value="<%=username_password%>">
                                 <i class="fa fa-bar-chart-o"> </i><!-- 图标 -->
 
-                                <input type="submit" class="waves-effect waves-dark" name="url_name" value="<%=urlName%>"
+                                <input type="submit" class="waves-effect waves-dark" name="url_name"
+                                       value="<%=urlName%>"
                                        onclick="jqSubmit()">
                             </form>
                             <%
@@ -142,7 +143,16 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="empty.html" class="waves-effect waves-dark"><i class="fa fa-fw fa-file"></i> Empty Page</a>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlMaxServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                        <i class="fa fa-dashboard"></i>
+                        申请提升url数量上限</a>
+                </li>
+                <li>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlReductionServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                        <i class="fa fa-dashboard"></i>
+                        数据还原</a>
                 </li>
             </ul>
         </div>
@@ -170,41 +180,48 @@
                 if (message_url != null) {
                     out.println(message_url);
                 }
+                Object message_delete_url = request.getAttribute("message_delete_url");
+                if (message_url != null) {
+                    out.println(message_delete_url);
+                }
 
-                List<String> urlNameList=urlData.get("url_name");
-                List<String> companyList=urlData.get("company");
-                List<String> urlList=urlData.get("url");
-                if (urlNameList != null && companyList!=null&&urlList!=null) {
-                    int index = 0;
-                    String company = null;
-                    String url = null;
-                    String url_name = null;
+                if (urlData != null) {
+                    List<String> urlNameList = urlData.get("url_name");
+                    List<String> companyList = urlData.get("company");
+                    List<String> urlList = urlData.get("url");
+                    if (urlNameList != null && companyList != null && urlList != null) {
+                        int index = 0;
+                        String company = null;
+                        String company_name = null;
+                        String url = null;
+                        String url_name = null;
 
-                    for (int i=0;i<urlNameList.size();++i) {
+                        for (int i = 0; i < urlNameList.size(); ++i) {
+                            company=companyList.get(i);
+                            switch (company) {
+                                case "0":
+                                    company_name = "天猫";
+                                    break;
+                                case "1":
+                                    company_name = "淘宝";
+                                    break;
+                                case "2":
+                                    company_name = "京东";
+                                    break;
+                                case "3":
+                                    company_name = "唯品会";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            url = urlList.get(i);
+                            url_name = urlNameList.get(i);
 
-                        switch (companyList.get(i)) {
-                            case "0":
-                                company = "天猫";
-                                break;
-                            case "1":
-                                company = "淘宝";
-                                break;
-                            case "2":
-                                company = "京东";
-                                break;
-                            case "3":
-                                company = "唯品会";
-                                break;
-                            default:
-                                break;
-                        }
-                        url = urlList.get(i);
-                        url_name = urlNameList.get(i);
             %>
             <tr>
                 <td><%=url_name %>
                 </td>
-                <td><%=company %>
+                <td><%=company_name %>
                 </td>
                 <td><%=url %>
                 </td>
@@ -213,11 +230,15 @@
                         <input type="hidden" name="username_password" value="<%=username_password%>">
                         <input type="hidden" name="url" value="<%=url%>">
                         <input type="hidden" name="delete_url" value="true">
+                        <input type="hidden" name="user_id" value="<%=userId%>">
+                        <input type="hidden" name="url_name" value="<%=url_name%>">
+                        <input type="hidden" name="company" value="<%=company%>">
                         <input type="submit" value="删 除">
                     </form>
                 </td>
             </tr>
             <%
+                        }
                     }
                 }
             %>

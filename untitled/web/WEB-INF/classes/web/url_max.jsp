@@ -142,6 +142,12 @@
                         <i class="fa fa-dashboard"></i>
                         申请提升url数量上限</a>
                 </li>
+                <li>
+                    <a class="active-menu waves-effect waves-dark"
+                       href="urlReductionServlet?user_name=<%=userName%>&pass_word=<%=passWord%>&user_id=<%=userId%>">
+                        <i class="fa fa-dashboard"></i>
+                        数据还原</a>
+                </li>
             </ul>
         </div>
     </nav>
